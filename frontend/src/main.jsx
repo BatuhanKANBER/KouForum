@@ -4,6 +4,6 @@ import { SignUp } from './pages/SignUp/signup.jsx'
 import { Login } from './pages/Login/login.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Login />
+    <SignUp />
   </React.StrictMode>,
 )
