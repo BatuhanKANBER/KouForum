@@ -14,7 +14,7 @@ export function SignUp() {
 
     const onSubmit = (event) =>{
         event.preventDefault();
-       axios.post("/api/create", {
+       axios.post("/api/users/create", {
         username,
         email,
         password

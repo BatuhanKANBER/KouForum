@@ -7,17 +7,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kouforum.backend.models.User;
-import com.kouforum.backend.repositories.UserRepository;
+import com.kouforum.backend.services.UserService;
+import com.kouforum.backend.shared.GenericMessage;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @PostMapping("/create")
-    void createUser(@RequestBody User user) {
-        userRepository.save(user);
+    GenericMessage createUser(@RequestBody User user) {
+        userService.save(user);
+        return new GenericMessage("User is created.");
     }
 }
