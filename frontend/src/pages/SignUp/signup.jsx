@@ -30,7 +30,7 @@ export function SignUp() {
                     <input id="email" onChange={(event) => setEmail(event.target.value)} type="email" placeholder="Email" />
                     <input id="password" onChange={(event) => setPassword(event.target.value)} type="password" placeholder="Parola" />
                     <input id="passwordConfirm" onChange={(event) => setPasswordConfirm(event.target.value)} type="password" placeholder="Parolayı Onayla" />
-                    <button type='submit'>Kayıt Ol</button>
+                    <button disabled={password!=passwordConfirm && password!=null} type='submit'>Kayıt Ol</button>
                 </form>
             </div>
             <div className="overlay-container">
