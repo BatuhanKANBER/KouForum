@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './signup.css'
 import { signUp } from './api'
 export function SignUp() {
@@ -8,6 +8,11 @@ export function SignUp() {
     const [passwordConfirm, setPasswordConfirm] = useState()
     const [apiProgress, setApiProgress] = useState(false)
     const [successMessage, setSuccessMessage] = useState()
+    const [errors, setErrors] = useState({})
+
+    useEffect(() => {
+        setErrors({})
+    }, [username])
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -21,8 +26,11 @@ export function SignUp() {
                 password
             })
             setSuccessMessage(response.data.message)
-        } catch {
-
+        } catch (axsiosError) {
+            console.log(axsiosError)
+            if (axsiosError.response?.data && axsiosError.response.data.status === 400) {
+                setErrors(axsiosError.response.data.validationErrors)
+            }
         } finally {
             setApiProgress(false)
         }
@@ -35,7 +43,8 @@ export function SignUp() {
             <div className="form-container sign-up-container">
 
                 <form onSubmit={onSubmit}>
-                    <input id="username" onChange={(event) => setUsername(event.target.value)} type="text" placeholder="Kullanıcı Adı" />
+                    <input id="username" className={errors.username ? "form-control is-invalid" : "form-control is-valid"} onChange={(event) => setUsername(event.target.value)} type="text" placeholder="Kullanıcı Adı" />
+                    <div className="invalid-feedback">{errors.username}</div>
                     <input id="email" onChange={(event) => setEmail(event.target.value)} type="email" placeholder="Email" />
                     <input id="password" onChange={(event) => setPassword(event.target.value)} type="password" placeholder="Parola" />
                     <input id="passwordConfirm" onChange={(event) => setPasswordConfirm(event.target.value)} type="password" placeholder="Parolayı Onayla" />
