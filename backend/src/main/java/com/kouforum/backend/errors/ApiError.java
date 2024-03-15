@@ -1,4 +1,4 @@
-package com.kouforum.backend.error;
+package com.kouforum.backend.errors;
 
 import java.util.Date;
 import java.util.HashMap;

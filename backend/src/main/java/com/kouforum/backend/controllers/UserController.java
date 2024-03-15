@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kouforum.backend.error.ApiError;
+import com.kouforum.backend.errors.ApiError;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.services.UserService;
 import com.kouforum.backend.shared.GenericMessage;
@@ -44,7 +44,7 @@ public class UserController {
         apiError.setMessage("Validation error");
         apiError.setStatus(400);
         var validationErrors = exception.getBindingResult().getFieldErrors().stream()
-                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage, (existing, replacing)-> existing));
         apiError.setValidationErrors(validationErrors);
         return ResponseEntity.badRequest().body(apiError);
     }

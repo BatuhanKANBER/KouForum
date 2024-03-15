@@ -29,6 +29,14 @@ export function SignUp() {
         });
     }, [email])
 
+    useEffect(() => {
+        setErrors(function (lastErrors) {
+            return {
+                ...lastErrors,
+                password: undefined
+            }
+        });
+    }, [password])
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -47,7 +55,7 @@ export function SignUp() {
             console.log(axsiosError)
             if (axsiosError.response?.data && axsiosError.response.data.status === 400) {
                 setErrors(axsiosError.response.data.validationErrors)
-            }else{
+            } else {
                 setGeneralErrors("Unexpected error occured, please try again.")
             }
         } finally {
@@ -62,30 +70,25 @@ export function SignUp() {
                 <div className="card-body">
                     <form onSubmit={onSubmit}>
                         <div className="mb-3 d-flex justify-content-center">
-                            <h3>KAYIT OL</h3>
+                            <h1>KAYIT OL</h1>
                         </div>
-                        <Input id="username" error={errors.username} onChange={(event) => setUsername(event.target.value)} placeholder="Kullanıcı Adı" />
-                        <Input id="email" error={errors.email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" />
-
-                        <div className="mb-3">
-
-                            <input id="password" className="form-control" onChange={(event) => setPassword(event.target.value)} type="password" placeholder="Parola" />
-                        </div>  <div className="mb-3">
-
-                            <input id="passwordConfirm" className="form-control" onChange={(event) => setPasswordConfirm(event.target.value)} type="password" placeholder="Parolayı Onayla" />
-                        </div>  <div className="mb-3">
-
+                        <Input id="username" error={errors.username} onChange={(event) => setUsername(event.target.value)} placeholder="Kullanıcı Adı" type="text" />
+                        <Input id="email" error={errors.email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" type="email" />
+                        <Input id="password" error={errors.password} onChange={(event) => setPassword(event.target.value)} placeholder="Parola" type="password" />
+                        <Input id="passwordConfirm" onChange={(event) => setPasswordConfirm(event.target.value)} placeholder="Parolayı Onayla" type="password" />
+                        <div className="mb-3 d-flex justify-content-between">
                             <button className="btn btn-primary text-white" disabled={apiProgress || (password != passwordConfirm || !password)} type='submit'>
                                 {apiProgress && <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>}
                                 Kayıt Ol
                             </button>
+                            <a href="#">Giriş Yap</a>
                         </div>
                         <br></br>
                         {successMessage && (<div className="alert alert-success" role="alert">{successMessage}</div>)}
                         {generalErrors && (<div className="alert alert-danger" role="alert">{generalErrors}</div>)}
                     </form>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     </>
 }
