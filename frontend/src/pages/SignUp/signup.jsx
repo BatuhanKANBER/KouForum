@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { signUp } from './api'
+import { Input } from './components/Input'
 export function SignUp() {
     const [username, setUsername] = useState()
     const [email, setEmail] = useState()
@@ -8,14 +9,31 @@ export function SignUp() {
     const [apiProgress, setApiProgress] = useState(false)
     const [successMessage, setSuccessMessage] = useState()
     const [errors, setErrors] = useState({})
+    const [generalErrors, setGeneralErrors] = useState()
 
     useEffect(() => {
-        setErrors({})
+        setErrors(function (lastErrors) {
+            return {
+                ...lastErrors,
+                username: undefined
+            }
+        });
     }, [username])
+
+    useEffect(() => {
+        setErrors(function (lastErrors) {
+            return {
+                ...lastErrors,
+                email: undefined
+            }
+        });
+    }, [email])
+
 
     const onSubmit = async (event) => {
         event.preventDefault();
         setSuccessMessage();
+        setGeneralErrors();
         setApiProgress(true);
 
         try {
@@ -29,6 +47,8 @@ export function SignUp() {
             console.log(axsiosError)
             if (axsiosError.response?.data && axsiosError.response.data.status === 400) {
                 setErrors(axsiosError.response.data.validationErrors)
+            }else{
+                setGeneralErrors("Unexpected error occured, please try again.")
             }
         } finally {
             setApiProgress(false)
@@ -44,14 +64,10 @@ export function SignUp() {
                         <div className="mb-3 d-flex justify-content-center">
                             <h3>KAYIT OL</h3>
                         </div>
-                        <div className="mb-3">
-                            <input id="username" className={errors.username ? "form-control is-invalid" : "form-control is-valid"} onChange={(event) => setUsername(event.target.value)} type="text" placeholder="Kullanıcı Adı" />
-                            <div className="invalid-feedback">{errors.username}</div>
-                        </div>
-                        <div className="mb-3">
+                        <Input id="username" error={errors.username} onChange={(event) => setUsername(event.target.value)} placeholder="Kullanıcı Adı" />
+                        <Input id="email" error={errors.email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" />
 
-                            <input id="email" className="form-control" onChange={(event) => setEmail(event.target.value)} type="email" placeholder="Email" />
-                        </div>  <div className="mb-3">
+                        <div className="mb-3">
 
                             <input id="password" className="form-control" onChange={(event) => setPassword(event.target.value)} type="password" placeholder="Parola" />
                         </div>  <div className="mb-3">
@@ -65,7 +81,8 @@ export function SignUp() {
                             </button>
                         </div>
                         <br></br>
-                        {successMessage && <div className="alert alert-success" role="alert">{successMessage}</div>}
+                        {successMessage && (<div className="alert alert-success" role="alert">{successMessage}</div>)}
+                        {generalErrors && (<div className="alert alert-danger" role="alert">{generalErrors}</div>)}
                     </form>
                 </div>
             </div>
