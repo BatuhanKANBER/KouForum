@@ -54,8 +54,12 @@ export function SignUp() {
             setSuccessMessage(response.data.message)
         } catch (axsiosError) {
             console.log(axsiosError)
-            if (axsiosError.response?.data && axsiosError.response.data.status === 400) {
-                setErrors(axsiosError.response.data.validationErrors)
+            if (axsiosError.response?.data) {
+                if (axsiosError.response.data.status === 400) {
+                    setErrors(axsiosError.response.data.validationErrors)
+                }else{
+                    setGeneralErrors(axsiosError.response.data.message)
+                }
             } else {
                 setGeneralErrors("Unexpected error occured, please try again.")
             }

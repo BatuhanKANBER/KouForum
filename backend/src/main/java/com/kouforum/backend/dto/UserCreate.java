@@ -13,7 +13,7 @@ public record UserCreate(
 
         @NotBlank @Email String email,
 
-        @Size(min = 6, max = 255) @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).*$", message = "{hoaxify.constraint.password.pattern}") String password) {
+        @Size(min = 6, max = 255) @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).*$", message = "{kouforum.constraint.password.pattern}") String password) {
 
     public User toUser() {
         User user = new User();

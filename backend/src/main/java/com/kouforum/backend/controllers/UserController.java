@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kouforum.backend.dto.UserCreate;
 import com.kouforum.backend.errors.ApiError;
+import com.kouforum.backend.exeptions.ActivationNotificationExeption;
 import com.kouforum.backend.services.UserService;
 import com.kouforum.backend.shared.GenericMessage;
 
@@ -43,5 +44,15 @@ public class UserController {
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage, (existing, replacing)-> existing));
         apiError.setValidationErrors(validationErrors);
         return ResponseEntity.badRequest().body(apiError);
+    }
+
+    //VALID FOR ACTIVATION EMAIL
+    @ExceptionHandler(ActivationNotificationExeption.class)
+    ResponseEntity<ApiError> handleActivationNotificationEx(ActivationNotificationExeption exception) {
+        ApiError apiError = new ApiError();
+        apiError.setPath("/api/users/create");
+        apiError.setMessage(exception.getMessage());
+        apiError.setStatus(502);
+        return ResponseEntity.status(502).body(apiError);
     }
 }
