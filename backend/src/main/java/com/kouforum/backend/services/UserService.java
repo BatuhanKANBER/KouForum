@@ -3,12 +3,14 @@ package com.kouforum.backend.services;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kouforum.backend.exeptions.ActivationNotificationExeption;
+import com.kouforum.backend.exeptions.NotUniqueEmailExeption;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.repositories.UserRepository;
 
@@ -34,6 +36,8 @@ public class UserService {
             emailService.sendActivationEmail(user.getEmail(), user.getActivationToken());
         } catch (MailException exception) {
             throw new ActivationNotificationExeption();
+        } catch (DataIntegrityViolationException exception){
+            throw new NotUniqueEmailExeption();
         }
     }
 }

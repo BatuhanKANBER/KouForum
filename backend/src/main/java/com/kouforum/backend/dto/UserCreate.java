@@ -1,6 +1,7 @@
 package com.kouforum.backend.dto;
 
 import com.kouforum.backend.models.User;
+import com.kouforum.backend.validations.UniqueEmail;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +12,7 @@ public record UserCreate(
 
         @NotBlank @Size(min = 4, max = 30) String username,
 
-        @NotBlank @Email String email,
+        @NotBlank @Email @UniqueEmail String email,
 
         @Size(min = 6, max = 255) @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).*$", message = "{kouforum.constraint.password.pattern}") String password) {
 

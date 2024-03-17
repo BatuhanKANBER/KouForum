@@ -1,6 +1,8 @@
 package com.kouforum.backend.controllers;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kouforum.backend.dto.UserCreate;
 import com.kouforum.backend.errors.ApiError;
 import com.kouforum.backend.exeptions.ActivationNotificationExeption;
+import com.kouforum.backend.exeptions.NotUniqueEmailExeption;
 import com.kouforum.backend.services.UserService;
 import com.kouforum.backend.shared.GenericMessage;
 
@@ -54,5 +57,18 @@ public class UserController {
         apiError.setMessage(exception.getMessage());
         apiError.setStatus(502);
         return ResponseEntity.status(502).body(apiError);
+    }
+
+    //VALID FOR UNIQUE EMAIL
+    @ExceptionHandler(NotUniqueEmailExeption.class)
+    ResponseEntity<ApiError> handleNotUniqueEmailEx(NotUniqueEmailExeption exception) {
+        ApiError apiError = new ApiError();
+        apiError.setPath("/api/users/create");
+        apiError.setMessage(exception.getMessage());
+        apiError.setStatus(400);
+        Map<String, String> validationErrors = new HashMap<>();
+        validationErrors.put("email", "Email in use");
+        apiError.setValidationErrors(validationErrors);
+        return ResponseEntity.status(400).body(apiError);
     }
 }
