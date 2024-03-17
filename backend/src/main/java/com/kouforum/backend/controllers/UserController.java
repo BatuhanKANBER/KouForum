@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kouforum.backend.dto.UserCreate;
 import com.kouforum.backend.errors.ApiError;
-import com.kouforum.backend.models.User;
 import com.kouforum.backend.services.UserService;
 import com.kouforum.backend.shared.GenericMessage;
 
