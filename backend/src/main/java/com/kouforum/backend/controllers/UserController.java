@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kouforum.backend.dto.UserCreate;
 import com.kouforum.backend.errors.ApiError;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.services.UserService;
@@ -27,8 +28,8 @@ public class UserController {
 
     //USER CREATE
     @PostMapping("/create")
-    GenericMessage createUser(@Valid @RequestBody User user) {
-        userService.save(user);
+    GenericMessage createUser(@Valid @RequestBody UserCreate user) {
+        userService.save(user.toUser());
         return new GenericMessage("User is created.");
     }
 

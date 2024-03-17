@@ -4,10 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -17,17 +13,31 @@ public class User {
     @GeneratedValue
     long id;
 
-    @NotBlank
-    @Size(min = 4, max = 30)
     String username;
 
-    @NotBlank
-    @Email
     String email;
 
-    @Size(min = 6, max = 255)
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).*$")
     String password;
+
+    boolean isActive = false;
+    
+    String activationToken;
+
+    public String getActivationToken() {
+        return activationToken;
+    }
+
+    public void setActivationToken(String activationToken) {
+        this.activationToken = activationToken;
+    }
+
+    public boolean isIs_active() {
+        return isActive;
+    }
+
+    public void setIs_active(boolean isActive) {
+        this.isActive = isActive;
+    }
 
     public long getId() {
         return id;
