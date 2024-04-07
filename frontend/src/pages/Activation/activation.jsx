@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { activateUser } from "./api"
+import { Spinner } from "../Shared/Components/Spinner"
+import { Alert } from "../Shared/Components/Alert"
 
 export function Activation() {
     const { token } = useParams()
@@ -25,11 +27,10 @@ export function Activation() {
     }, [])
 
     return <>
-        {apiProgress && (<span
-            className="spinner-border"
-            aria-hidden="true"></span>)}
-        {successMessage && (<div className="alert alert-success" role="alert">{successMessage}</div>)}
-        {errorMessage && (<div className="alert alert-danger" role="alert">{errorMessage}</div>)}
+        {apiProgress && 
+        <Spinner />}
+        {successMessage && (<Alert>{successMessage}</Alert>)}
+        {errorMessage && (<Alert type="danger">{errorMessage}</Alert>)}
 
     </>
 }
