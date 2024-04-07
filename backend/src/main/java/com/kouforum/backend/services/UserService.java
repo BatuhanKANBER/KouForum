@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kouforum.backend.exeptions.ActivationNotificationExeption;
+import com.kouforum.backend.exeptions.InvalidTokenExeption;
 import com.kouforum.backend.exeptions.NotUniqueEmailExeption;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.repositories.UserRepository;
@@ -39,5 +40,15 @@ public class UserService {
         } catch (DataIntegrityViolationException exception){
             throw new NotUniqueEmailExeption();
         }
+    }
+
+    public void activateUser(String token){
+        User inDB = userRepository.findByActivationToken(token);
+        if(inDB == null){
+            throw new InvalidTokenExeption();
+        }
+        inDB.setIs_active(true);
+        inDB.setActivationToken(null);
+        userRepository.save(inDB);
     }
 }

@@ -4,10 +4,13 @@ import java.util.stream.Collectors;
 
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kouforum.backend.dto.UserCreate;
 import com.kouforum.backend.errors.ApiError;
 import com.kouforum.backend.exeptions.ActivationNotificationExeption;
+import com.kouforum.backend.exeptions.InvalidTokenExeption;
 import com.kouforum.backend.exeptions.NotUniqueEmailExeption;
 import com.kouforum.backend.services.UserService;
 import com.kouforum.backend.shared.GenericMessage;
-
+import com.kouforum.backend.shared.Messages;
 import jakarta.validation.Valid;
 
 @RestController
@@ -33,7 +37,15 @@ public class UserController {
     @PostMapping("/create")
     GenericMessage createUser(@Valid @RequestBody UserCreate user) {
         userService.save(user.toUser());
-        return new GenericMessage("User is created.");
+        String message = Messages.getMessageForLocale("kouforum.create.user.success", LocaleContextHolder.getLocale());
+        return new GenericMessage(message);
+    }
+
+    @PatchMapping("/{token}/activate")
+    GenericMessage activateUser(@PathVariable String token){
+        userService.activateUser(token);
+        String message = Messages.getMessageForLocale("kouforum.activate.user.success", LocaleContextHolder.getLocale());
+        return new GenericMessage(message);
     }
 
     //VALID OPERATIONS
@@ -69,6 +81,16 @@ public class UserController {
         Map<String, String> validationErrors = new HashMap<>();
         validationErrors.put("email", "Email in use");
         apiError.setValidationErrors(validationErrors);
+        return ResponseEntity.status(400).body(apiError);
+    }
+
+    //INVALID ACTIVATION TOKEN
+    @ExceptionHandler(InvalidTokenExeption.class)
+    ResponseEntity<ApiError> handleInvalidActivationTokenEx(InvalidTokenExeption exception) {
+        ApiError apiError = new ApiError();
+        apiError.setPath("/api/users/create");
+        apiError.setMessage(exception.getMessage());
+        apiError.setStatus(400);
         return ResponseEntity.status(400).body(apiError);
     }
 }
