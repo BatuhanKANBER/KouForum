@@ -78,8 +78,7 @@ export function SignUp() {
 
     return <>
         <div className="container pt-5">
-            <div className="card">
-                <div className="card-body">
+   
                     <form onSubmit={onSubmit}>
                         <div className="mb-3 d-flex justify-content-center">
                             <h1>KAYIT OL</h1>
@@ -88,19 +87,17 @@ export function SignUp() {
                         <Input id="email" error={errors.email} onChange={(event) => setEmail(event.target.value)} placeholder="Email" type="text" />
                         <Input id="password" error={errors.password} onChange={(event) => setPassword(event.target.value)} placeholder="Parola" type="password" />
                         <Input id="passwordConfirm" error={passwordConfirmError} onChange={(event) => setPasswordConfirm(event.target.value)} placeholder="Parolayı Onayla" type="password" />
-                        <div className="mb-3 d-flex justify-content-between">
+                        <div className="mb-3 d-flex justify-content-between w-100">
                             <button disabled={password !== passwordConfirm} className="btn btn-primary text-white" type='submit'>
                                 {apiProgress && <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>}
                                 Kayıt Ol
                             </button>
-                            <a href="#">Giriş Yap</a>
+                            <a href="/login">Giriş Yap</a>
                         </div>
                         <br></br>
                         {successMessage && (<div className="alert alert-success" role="alert">{successMessage}</div>)}
                         {generalErrors && (<div className="alert alert-danger" role="alert">{generalErrors}</div>)}
                     </form>
-                </div>
-            </div >
         </div >
     </>
 }
