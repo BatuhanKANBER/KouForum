@@ -13,6 +13,7 @@
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
     "classnames": "^2.5.1",
+    "http": "^0.0.1-security",
     "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",
     "primereact": "^10.6.2",

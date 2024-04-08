@@ -80,7 +80,7 @@ export function SignUp() {
     }, [password, passwordConfirm])
 
     return <>
-        <div className="container pt-5">
+        <div className="container mt-5">
 
             <form onSubmit={onSubmit}>
                 <div className="mb-3 d-flex justify-content-center">
