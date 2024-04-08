@@ -1,12 +1,12 @@
 import { SignUp } from "../pages/SignUp/signup.jsx"
-import { Login } from "../pages/Login/login.jsx"
 import {createBrowserRouter} from "react-router-dom"
 import { Activation } from "../pages/Activation/activation.jsx"
+import { Home } from "../pages/Home/Index.jsx"
 
 export default createBrowserRouter([
     {
-      path: "/login",
-      Component: Login
+      path: "*",
+      Component: Home
     },
     {
       path: "/signup",

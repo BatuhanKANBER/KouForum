@@ -96,7 +96,7 @@ export function SignUp() {
                             (<Spinner sm />)}
                         Kayıt Ol
                     </button>
-                    <a href="/login">Giriş Yap</a>
+                    <a href="#">Giriş Yap</a>
                 </div>
                 <br></br>
                 {successMessage && (<Alert>{successMessage}</Alert>)}

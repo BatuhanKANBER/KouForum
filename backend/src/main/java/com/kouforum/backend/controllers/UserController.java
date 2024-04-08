@@ -3,6 +3,9 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kouforum.backend.dto.UserCreate;
+import com.kouforum.backend.models.User;
 import com.kouforum.backend.errors.ApiError;
 import com.kouforum.backend.exeptions.ActivationNotificationExeption;
 import com.kouforum.backend.exeptions.InvalidTokenExeption;
@@ -25,6 +29,7 @@ import com.kouforum.backend.services.UserService;
 import com.kouforum.backend.shared.GenericMessage;
 import com.kouforum.backend.shared.Messages;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/users")
@@ -48,6 +53,11 @@ public class UserController {
         return new GenericMessage(message);
     }
 
+    @GetMapping("/list")
+    public Page<User> getUsers(Pageable page) {
+        return userService.getUsers(page);
+    }
+    
     //VALID OPERATIONS
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ApiError> handleMethodArgNotValidEx(MethodArgumentNotValidException exception) {

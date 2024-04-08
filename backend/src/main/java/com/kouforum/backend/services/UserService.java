@@ -2,6 +2,9 @@ package com.kouforum.backend.services;
 
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.MailException;
@@ -37,18 +40,23 @@ public class UserService {
             emailService.sendActivationEmail(user.getEmail(), user.getActivationToken());
         } catch (MailException exception) {
             throw new ActivationNotificationExeption();
-        } catch (DataIntegrityViolationException exception){
+        } catch (DataIntegrityViolationException exception) {
             throw new NotUniqueEmailExeption();
         }
     }
 
-    public void activateUser(String token){
+    public void activateUser(String token) {
         User inDB = userRepository.findByActivationToken(token);
-        if(inDB == null){
+        if (inDB == null) {
             throw new InvalidTokenExeption();
         }
         inDB.setIs_active(true);
         inDB.setActivationToken(null);
         userRepository.save(inDB);
     }
+
+    public Page<User> getUsers(Pageable page) {
+        return userRepository.findAll(page);
+    }
+
 }
