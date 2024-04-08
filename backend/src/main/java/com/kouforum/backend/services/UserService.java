@@ -12,9 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.kouforum.backend.exeptions.ActivationNotificationExeption;
-import com.kouforum.backend.exeptions.InvalidTokenExeption;
-import com.kouforum.backend.exeptions.NotUniqueEmailExeption;
+import com.kouforum.backend.exeptions.ActivationNotificationException;
+import com.kouforum.backend.exeptions.InvalidTokenException;
+import com.kouforum.backend.exeptions.NotFoundException;
+import com.kouforum.backend.exeptions.NotUniqueEmailException;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.repositories.UserRepository;
 
@@ -39,16 +40,16 @@ public class UserService {
             userRepository.saveAndFlush(user);
             emailService.sendActivationEmail(user.getEmail(), user.getActivationToken());
         } catch (MailException exception) {
-            throw new ActivationNotificationExeption();
+            throw new ActivationNotificationException();
         } catch (DataIntegrityViolationException exception) {
-            throw new NotUniqueEmailExeption();
+            throw new NotUniqueEmailException();
         }
     }
 
     public void activateUser(String token) {
         User inDB = userRepository.findByActivationToken(token);
         if (inDB == null) {
-            throw new InvalidTokenExeption();
+            throw new InvalidTokenException();
         }
         inDB.setIs_active(true);
         inDB.setActivationToken(null);
@@ -57,6 +58,10 @@ public class UserService {
 
     public Page<User> getUsers(Pageable page) {
         return userRepository.findAll(page);
+    }
+
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
 }

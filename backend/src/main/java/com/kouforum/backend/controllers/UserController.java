@@ -23,12 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kouforum.backend.dto.UserCreate;
 import com.kouforum.backend.dto.UserDTO;
 import com.kouforum.backend.errors.ApiError;
-import com.kouforum.backend.exeptions.ActivationNotificationExeption;
-import com.kouforum.backend.exeptions.InvalidTokenExeption;
-import com.kouforum.backend.exeptions.NotUniqueEmailExeption;
+import com.kouforum.backend.exeptions.ActivationNotificationException;
+import com.kouforum.backend.exeptions.InvalidTokenException;
+import com.kouforum.backend.exeptions.NotFoundException;
+import com.kouforum.backend.exeptions.NotUniqueEmailException;
 import com.kouforum.backend.services.UserService;
 import com.kouforum.backend.shared.GenericMessage;
 import com.kouforum.backend.shared.Messages;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -60,11 +63,17 @@ public class UserController {
         return userService.getUsers(page).map(UserDTO::new);
     }
 
+    @GetMapping("/{id}")
+    UserDTO getUserById(@PathVariable Long id) {
+        return new UserDTO(userService.getUser(id));
+    }
+
     // VALID OPERATIONS
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<ApiError> handleMethodArgNotValidEx(MethodArgumentNotValidException exception) {
+    ResponseEntity<ApiError> handleMethodArgNotValidException(MethodArgumentNotValidException exception,
+            HttpServletRequest httpServletRequest) {
         ApiError apiError = new ApiError();
-        apiError.setPath("/api/users/create");
+        apiError.setPath(httpServletRequest.getRequestURI());
         apiError.setMessage("Validation error");
         apiError.setStatus(400);
         var validationErrors = exception.getBindingResult().getFieldErrors().stream()
@@ -75,20 +84,22 @@ public class UserController {
     }
 
     // VALID FOR ACTIVATION EMAIL
-    @ExceptionHandler(ActivationNotificationExeption.class)
-    ResponseEntity<ApiError> handleActivationNotificationEx(ActivationNotificationExeption exception) {
+    @ExceptionHandler(ActivationNotificationException.class)
+    ResponseEntity<ApiError> handleActivationNotificationException(ActivationNotificationException exception,
+            HttpServletRequest httpServletRequest) {
         ApiError apiError = new ApiError();
-        apiError.setPath("/api/users/create");
+        apiError.setPath(httpServletRequest.getRequestURI());
         apiError.setMessage(exception.getMessage());
         apiError.setStatus(502);
         return ResponseEntity.status(502).body(apiError);
     }
 
     // VALID FOR UNIQUE EMAIL
-    @ExceptionHandler(NotUniqueEmailExeption.class)
-    ResponseEntity<ApiError> handleNotUniqueEmailEx(NotUniqueEmailExeption exception) {
+    @ExceptionHandler(NotUniqueEmailException.class)
+    ResponseEntity<ApiError> handleNotUniqueEmailException(NotUniqueEmailException exception,
+            HttpServletRequest httpServletRequest) {
         ApiError apiError = new ApiError();
-        apiError.setPath("/api/users/create");
+        apiError.setPath(httpServletRequest.getRequestURI());
         apiError.setMessage(exception.getMessage());
         apiError.setStatus(400);
         Map<String, String> validationErrors = new HashMap<>();
@@ -98,12 +109,24 @@ public class UserController {
     }
 
     // INVALID ACTIVATION TOKEN
-    @ExceptionHandler(InvalidTokenExeption.class)
-    ResponseEntity<ApiError> handleInvalidActivationTokenEx(InvalidTokenExeption exception) {
+    @ExceptionHandler(InvalidTokenException.class)
+    ResponseEntity<ApiError> handleInvalidActivationTokenException(InvalidTokenException exception,
+            HttpServletRequest httpServletRequest) {
         ApiError apiError = new ApiError();
-        apiError.setPath("/api/users/create");
+        apiError.setPath(httpServletRequest.getRequestURI());
         apiError.setMessage(exception.getMessage());
         apiError.setStatus(400);
         return ResponseEntity.status(400).body(apiError);
+    }
+
+    // INVALID ENTITY
+    @ExceptionHandler(NotFoundException.class)
+    ResponseEntity<ApiError> handleNotFoundException(NotFoundException exception,
+            HttpServletRequest httpServletRequest) {
+        ApiError apiError = new ApiError();
+        apiError.setPath(httpServletRequest.getRequestURI());
+        apiError.setMessage(exception.getMessage());
+        apiError.setStatus(404);
+        return ResponseEntity.status(404).body(apiError);
     }
 }
