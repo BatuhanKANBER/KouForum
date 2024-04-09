@@ -24,11 +24,11 @@ export function Activation() {
         }
 
         activate()
-    }, [])
+    }, [token])
 
     return <>
-        {apiProgress && 
-        <Spinner />}
+        {apiProgress &&
+            <Spinner />}
         {successMessage && (<Alert>{successMessage}</Alert>)}
         {errorMessage && (<Alert type="danger">{errorMessage}</Alert>)}
 
