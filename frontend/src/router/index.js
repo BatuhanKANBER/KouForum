@@ -2,8 +2,8 @@ import { SignUp } from "../pages/SignUp/signup.jsx"
 import { createBrowserRouter } from "react-router-dom"
 import { Activation } from "../pages/Activation/activation.jsx"
 import { Home } from "../pages/Admin/Home/Index.jsx"
-import { UserPage } from "../pages/Admin/User/Index.jsx"
-import { UsersPage } from "../pages/Admin/Users/Index.jsx"
+import { User } from "../pages/Admin/User/Index.jsx"
+import { Users } from "../pages/Admin/Users/Index.jsx"
 
 export default createBrowserRouter([
   {
@@ -12,11 +12,11 @@ export default createBrowserRouter([
   },
   {
     path: "/users",
-    Component: UsersPage
+    Component: Users
   },
   {
     path: "/user/:id",
-    Component: UserPage
+    Component: User
   },
   {
     path: "/signup",
