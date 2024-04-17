@@ -1,5 +1,5 @@
-import axios from "axios";
+import http from "../../lib/http"
 
 export function signUp(body){
-    return axios.post("/api/users/create", body);
+    return http.post("/api/users/create", body);
 }

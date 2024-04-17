@@ -1,5 +1,6 @@
-import axios from "axios";
+import http from "../../lib/http"
+
 
 export function login(credentials){
-    return axios.post("/api/auth/check", credentials);
+    return http.post("/api/auth/check", credentials);
 }

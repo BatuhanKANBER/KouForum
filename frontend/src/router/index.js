@@ -1,11 +1,11 @@
 import { SignUp } from "../pages/SignUp/signup.jsx"
 import { createBrowserRouter } from "react-router-dom"
 import { Activation } from "../pages/Activation/activation.jsx"
-import { Home } from "../pages/Admin/Home/Index.jsx"
-import { User } from "../pages/Admin/User/Index.jsx"
-import { Users } from "../pages/Admin/Users/Index.jsx"
+import { Home } from "../pages/Home/Index.jsx"
+import { User } from "../pages/User/Index.jsx"
+import { Users } from "../pages/Users/Index.jsx"
 import { Login } from "../pages/Login/login.jsx"
-import App from "../pages/Admin/App.jsx"
+import App from "../pages/App.jsx"
 
 export default createBrowserRouter([
   {

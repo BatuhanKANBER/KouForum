@@ -1,7 +1,7 @@
 import { getUserById } from "./api";
-import { Spinner } from "../../Shared/Components/Spinner";
-import { Alert } from "../../Shared/Components/Alert";
-import { useRouteParamApiRequest } from "../../Shared/Hooks/useRouteParamApiRequest";
+import { Spinner } from "../Shared/Components/Spinner";
+import { Alert } from "../Shared/Components/Alert";
+import { useRouteParamApiRequest } from "../Shared/Hooks/useRouteParamApiRequest";
 import { ProfileCard } from "./ProfileCard";
 
 export function User() {

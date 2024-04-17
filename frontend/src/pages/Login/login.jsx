@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Spinner } from '../Shared/Components/Spinner'
 import { Input } from '../Shared/Components/Input';
 import { login } from './api';
 import { Alert } from '../Shared/Components/Alert';
+import { useAuthDispatch } from '../Shared/State/context';
+
 
 export function Login() {
-
     const [apiProgress, setApiProgress] = useState(false)
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [errors, setErrors] = useState({})
     const [generalErrors, setGeneralErrors] = useState()
-
+    const navigate = useNavigate()
+    const dispatch = useAuthDispatch()
 
     useEffect(() => {
         setErrors(function (lastErrors) {
@@ -38,7 +40,9 @@ export function Login() {
         setApiProgress(true);
 
         try {
-            await login({ email, password })
+            const response = await login({ email, password })
+            dispatch({ type: 'login-success', data: response.data.user })
+            navigate("/")
         } catch (axiosError) {
             console.log(axiosError)
             if (axiosError.response?.data) {

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import defaultProfileImage from "../../../../assets/default_user.png"
+import defaultProfileImage from "../../../assets/default_user.png"
 
 export function UserTableItem({ user }) {
     return <>
