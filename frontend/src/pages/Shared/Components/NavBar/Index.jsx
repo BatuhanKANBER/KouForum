@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuthDispatch, useAuthState } from "../../State/context";
+import { ProfileImage } from "../ProfileImage";
 
 export function Navbar() {
     const authState = useAuthState()
@@ -21,7 +22,7 @@ export function Navbar() {
 
                     <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span className="mr-2 d-none d-lg-inline text-gray-600 small">{authState.username}</span>
-                        <img className="img-profile rounded-circle" src="img/undraw_profile.svg" />
+                        <ProfileImage width={30}/>
                     </a>
 
 

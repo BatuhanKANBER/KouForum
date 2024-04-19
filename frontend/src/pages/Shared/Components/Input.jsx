@@ -1,6 +1,6 @@
 export function Input(props) {
 
-    const {id, error, onChange, placeholder, type} = props
+    const {id, error, onChange, placeholder, type, defaultValue} = props
 
     return (
         < div className="mb-3 w-100" >
@@ -9,7 +9,9 @@ export function Input(props) {
             className={error ? "form-control is-invalid" : "form-control"} 
             onChange={onChange}  
             placeholder={placeholder}
-            type={type} />
+            type={type} 
+            defaultValue={defaultValue}
+            />
             <div className="invalid-feedback">{error}</div>
         </div >
     )
