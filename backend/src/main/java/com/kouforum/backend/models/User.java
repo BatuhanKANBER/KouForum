@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -24,11 +25,12 @@ public class User {
     String password;
 
     @JsonIgnore
-    boolean isActive = false;
+    boolean active = false;
 
     @JsonIgnore
     String activationToken;
 
+    @Lob
     String image;
 
     public String getImage() {
@@ -47,12 +49,12 @@ public class User {
         this.activationToken = activationToken;
     }
 
-    public boolean isIs_active() {
-        return isActive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setIs_active(boolean isActive) {
-        this.isActive = isActive;
+    public void setIs_active(boolean active) {
+        this.active = active;
     }
 
     public long getId() {

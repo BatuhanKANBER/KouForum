@@ -5,22 +5,49 @@ import { useAuthDispatch, useAuthState } from "../../Shared/State/context";
 import { updateUser } from "./api";
 import { Alert } from "../../Shared/Components/Alert";
 
-export function UserEditForm({ setEditMode }) {
+export function UserEditForm({ setEditMode, setTempImage }) {
     const authState = useAuthState()
     const [apiProgress, setApiProgress] = useState(false)
     const [errors, setErrors] = useState({})
     const [newUserName, setNewUsername] = useState(authState.username)
     const [generalErrors, setGeneralErrors] = useState()
     const dispatch = useAuthDispatch()
+    const [newImage, setNewImage] = useState()
 
     const onChangeUsername = (event) => {
         setNewUsername(event.target.value)
-        setErrors({})
+        setErrors(function (lastErrors) {
+            return {
+                ...lastErrors,
+                username: undefined
+            }
+        });
     }
+
 
     const onClickCancel = () => {
         setEditMode(false)
         setNewUsername(authState.username)
+        setNewImage()
+        setTempImage()
+    }
+
+    const onSelectImage = (event) => {
+        setErrors(function (lastErrors) {
+            return {
+                ...lastErrors,
+                image: undefined
+            }
+        });
+        if (event.target.files.length < 1) return;
+        const file = event.target.files[0]
+        const fileReader = new FileReader();
+        fileReader.onloadend = () => {
+            const data = fileReader.result
+            setNewImage(data);
+            setTempImage(data);
+        }
+        fileReader.readAsDataURL(file);
     }
 
     const onSubmit = async (event) => {
@@ -29,18 +56,18 @@ export function UserEditForm({ setEditMode }) {
         setErrors({})
         setGeneralErrors()
         try {
-            await updateUser(authState.id, { username: newUserName })
-            dispatch({ type: 'user-update-success', data: { username: newUserName } })
+            const { data } = await updateUser(authState.id, { username: newUserName, image: newImage })
+            dispatch({ type: 'user-update-success', data: { username: data.username, image: data.image } })
             setEditMode(false)
         } catch (axiosError) {
             if (axiosError.response?.data) {
                 if (axiosError.response.data.status === 400) {
                     setErrors(axiosError.response.data.validationErrors);
                 } else {
-                    setGeneralError(axiosError.response.data.message);
+                    setGeneralErrors(axiosError.response.data.message)
                 }
             } else {
-                setGeneralError(t("genericError"));
+                setGeneralErrors("Unexpected error occured, please try again.")
             }
         } finally {
             setApiProgress(false);
@@ -50,6 +77,7 @@ export function UserEditForm({ setEditMode }) {
     return <>
         <form onSubmit={onSubmit}>
             <Input error={errors.username} onChange={onChangeUsername} defaultValue={authState.username} placeholder="Kullanıcı Adı"></Input>
+            <Input error={errors.image} type="File" onChange={onSelectImage}></Input>
             <div className="d-flex justify-content-between">
                 <button onClick={onClickCancel} className="btn btn-outline-secondary" type='button'>
                     Vazgeç

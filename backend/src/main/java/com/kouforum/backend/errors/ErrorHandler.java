@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.kouforum.backend.exeptions.ActivationNotificationException;
 import com.kouforum.backend.exeptions.AuthenticationException;
-import com.kouforum.backend.exeptions.AuthorizationExeption;
 import com.kouforum.backend.exeptions.InvalidTokenException;
 import com.kouforum.backend.exeptions.NotFoundException;
 import com.kouforum.backend.exeptions.NotUniqueEmailException;
@@ -29,7 +28,6 @@ public class ErrorHandler {
             InvalidTokenException.class,
             NotFoundException.class,
             AuthenticationException.class,
-            AuthorizationExeption.class
     })
     ResponseEntity<ApiError> handleException(Exception exception,
             HttpServletRequest httpServletRequest) {
@@ -58,8 +56,6 @@ public class ErrorHandler {
             apiError.setStatus(404);
         } else if (exception instanceof AuthenticationException) {
             apiError.setStatus(401);
-        }else if (exception instanceof AuthorizationExeption) {
-            apiError.setStatus(403);
         }
         return ResponseEntity.status(apiError.getStatus()).body(apiError);
     }

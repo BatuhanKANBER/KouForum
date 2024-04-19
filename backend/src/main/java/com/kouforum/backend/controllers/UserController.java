@@ -2,21 +2,21 @@ package com.kouforum.backend.controllers;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kouforum.backend.dto.UserCreate;
 import com.kouforum.backend.dto.UserDTO;
 import com.kouforum.backend.dto.UserUpdate;
-import com.kouforum.backend.exeptions.AuthorizationExeption;
-import com.kouforum.backend.services.TokenService;
+import com.kouforum.backend.models.CurrentUser;
 import com.kouforum.backend.services.UserService;
 import com.kouforum.backend.shared.GenericMessage;
 import com.kouforum.backend.shared.Messages;
@@ -31,9 +31,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    TokenService tokenService;
 
     // USER CREATE
     @PostMapping("/create")
@@ -53,9 +50,8 @@ public class UserController {
 
     @GetMapping("/list")
     Page<UserDTO> getUsers(Pageable page,
-            @RequestHeader(name = "Authorization", required = false) String authorizationHeader) {
-        var loggedInUser = tokenService.verifyToken(authorizationHeader);
-        return userService.getUsers(page, loggedInUser).map(UserDTO::new);
+            @AuthenticationPrincipal CurrentUser currentUser) {
+        return userService.getUsers(page, currentUser).map(UserDTO::new);
     }
 
     @GetMapping("/{id}")
@@ -64,12 +60,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    UserDTO updateUser(@PathVariable long id, @Valid @RequestBody UserUpdate userUpdate,
-            @RequestHeader(name = "Authorization", required = false) String authorizationHeader) {
-        var loggedInUser = tokenService.verifyToken(authorizationHeader);
-        if (loggedInUser == null || loggedInUser.getId() != id) {
-            throw new AuthorizationExeption();
-        }
+    @PreAuthorize("#id == principal.id")
+    UserDTO updateUser(@PathVariable long id, @Valid @RequestBody UserUpdate userUpdate) {
         return new UserDTO(userService.updateUser(id, userUpdate));
     }
 
