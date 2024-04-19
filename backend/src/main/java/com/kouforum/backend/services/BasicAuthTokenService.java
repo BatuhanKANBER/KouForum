@@ -3,6 +3,7 @@ package com.kouforum.backend.services;
 import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import com.kouforum.backend.models.Token;
 import com.kouforum.backend.models.User;
 
 @Service
+@ConditionalOnProperty(name = "kouforum.token-type", havingValue = "basic")
 public class BasicAuthTokenService implements TokenService {
     @Autowired
     UserService userService;
@@ -43,5 +45,9 @@ public class BasicAuthTokenService implements TokenService {
             return null;
         }
         return inDB;
+    }
+
+    @Override
+    public void logout(String authorizationHeader) {
     }
 }

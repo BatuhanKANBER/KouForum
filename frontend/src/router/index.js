@@ -6,6 +6,8 @@ import { User } from "../pages/User/Index.jsx"
 import { Users } from "../pages/Users/Index.jsx"
 import { Login } from "../pages/Login/login.jsx"
 import App from "../pages/App.jsx"
+import { PasswordReset } from "../pages/PasswordReset/Request/Index.jsx"
+import { SetPassword } from "../pages/PasswordReset/SetPassword/Index.jsx"
 
 export default createBrowserRouter([
   {
@@ -36,6 +38,14 @@ export default createBrowserRouter([
       {
         path: "/activation/:token",
         Component: Activation
+      },
+      {
+        path: "password-reset/request",
+        Component: PasswordReset
+      },
+      {
+        path: "/password-reset/set",
+        Component: SetPassword
       }
     ]
   }

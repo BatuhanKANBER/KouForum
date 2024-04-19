@@ -11,6 +11,8 @@ import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.kouforum.backend.dto.PasswordResetRequest;
+import com.kouforum.backend.dto.PasswordUpdate;
 import com.kouforum.backend.dto.UserUpdate;
 import com.kouforum.backend.exeptions.ActivationNotificationException;
 import com.kouforum.backend.exeptions.InvalidTokenException;
@@ -20,6 +22,7 @@ import com.kouforum.backend.models.CurrentUser;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.repositories.UserRepository;
 
+import jakarta.persistence.Id;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -85,5 +88,35 @@ public class UserService {
             inDB.setImage(fileName);
         }
         return userRepository.save(inDB);
+    }
+
+    public void deleteUser(long id) {
+        User inDB = getUser(id);
+        if (inDB.getImage() != null) {
+            fileService.deleteProfileImage(inDB.getImage());
+        }
+        userRepository.deleteById(id);
+    }
+
+    public void handleResetRequest(PasswordResetRequest passwordResetRequest) {
+        User inDB = findByEmail(passwordResetRequest.email());
+        if (inDB == null) {
+            throw new NotFoundException((long) 0);
+        }
+        inDB.setPasswordResetToken(UUID.randomUUID().toString());
+        this.userRepository.save(inDB);
+        this.emailService.sendPasswordResetEmail(inDB.getEmail(), inDB.getPasswordResetToken());
+    }
+
+    public void updatePassword(String token, PasswordUpdate passwordUpdate) {
+        User inDB = userRepository.findByPasswordResetToken(token);
+        if (inDB == null) {
+            throw new InvalidTokenException();
+        }
+        inDB.setPasswordResetToken(null);
+        inDB.setPassword(passwordEncoder.encode(passwordUpdate.password()));
+        inDB.setIs_active(true);
+        inDB.setActivationToken(null);
+        userRepository.save(inDB);
     }
 }

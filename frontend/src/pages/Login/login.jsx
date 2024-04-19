@@ -75,6 +75,9 @@ export function Login() {
                     </button>
                     <Link to="/SignUp"> Kayıt Ol</Link>
                 </div>
+                <div className='d-flex justify-content-center'>
+                    <Link to="/password-reset/request">Şifremi Unuttum!</Link>
+                </div>
                 {generalErrors && (<Alert type="danger">{generalErrors}</Alert>)}
             </form>
         </div >

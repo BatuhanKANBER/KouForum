@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kouforum.backend.dto.PasswordResetRequest;
+import com.kouforum.backend.dto.PasswordUpdate;
 import com.kouforum.backend.dto.UserCreate;
 import com.kouforum.backend.dto.UserDTO;
 import com.kouforum.backend.dto.UserUpdate;
@@ -22,6 +24,8 @@ import com.kouforum.backend.shared.GenericMessage;
 import com.kouforum.backend.shared.Messages;
 
 import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -65,4 +69,22 @@ public class UserController {
         return new UserDTO(userService.updateUser(id, userUpdate));
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("#id == principal.id")
+    GenericMessage deleteUser(@PathVariable long id) {
+        userService.deleteUser(id);
+        return new GenericMessage("User is deleted.");
+    }
+
+    @PostMapping("/password-reset")
+    GenericMessage passwordResetRequest(@Valid @RequestBody PasswordResetRequest passwordResetRequest) {
+        userService.handleResetRequest(passwordResetRequest);
+        return new GenericMessage("Check your email to reset your password.");
+    }
+
+    @PatchMapping("/{token}/password")
+    GenericMessage setPassword(@PathVariable String token, @Valid @RequestBody PasswordUpdate passwordUpdate) {
+        userService.updatePassword(token, passwordUpdate);
+        return new GenericMessage("Password updated successfully.");
+    }
 }

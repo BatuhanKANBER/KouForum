@@ -20,6 +20,10 @@ public class BackendApplication {
 	@Bean
 	CommandLineRunner fakeUsers(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		return (args) -> {
+			var userInDB = userRepository.findByEmail("user1@gmail.com");
+			if (userInDB != null) {
+				return;
+			}
 			for (var i = 1; i <= 28; i++) {
 				User user = new User();
 				user.setUsername("fake_user" + i);
@@ -29,13 +33,6 @@ public class BackendApplication {
 				userRepository.save(user);
 				System.out.println(user.getUsername() + " is created.");
 			}
-			User user = new User();
-			user.setUsername("fake_user" + 31);
-			user.setEmail("user" + 31 + "@gmail.com");
-			user.setPassword(passwordEncoder.encode("Password123"));
-			user.setIs_active(false);
-			userRepository.save(user);
-			System.out.println(user.getUsername() + " is created.");
 		};
 	}
 }
