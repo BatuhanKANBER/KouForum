@@ -11,7 +11,7 @@ function App() {
                 <div id="content-wrapper" className="d-flex flex-column">
                     <div id="content">
                         <Navbar />
-                        <div className="container-fluid">
+                        <div className="container-fluid m-10 w-75">
                             <Outlet />
                         </div>
                     </div>

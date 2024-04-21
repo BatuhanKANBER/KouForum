@@ -22,7 +22,6 @@ import com.kouforum.backend.models.CurrentUser;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.repositories.UserRepository;
 
-import jakarta.persistence.Id;
 import jakarta.transaction.Transactional;
 
 @Service
