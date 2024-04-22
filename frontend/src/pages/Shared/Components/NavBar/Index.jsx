@@ -1,4 +1,4 @@
-import { Link, RouterProvider, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthDispatch, useAuthState } from "../../State/context";
 import { ProfileImage } from "../ProfileImage";
 import { logout } from "./api";
@@ -22,6 +22,9 @@ export function Navbar() {
     }
     return <>
         <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            <Link class="d-flex align-items-center justify-content-center ml-5 link-underline link-underline-opacity-0" to="/">
+            <h1 className="h3 mb-0 text-primary-800">KOUFORUM</h1>
+            </Link>
             {/* Sidebar Toggle (Topbar) */}
             <button id="sidebarToggleTop" className="btn btn-link d-md-none rounded-circle mr-3">
                 <i className="fa fa-bars" />
