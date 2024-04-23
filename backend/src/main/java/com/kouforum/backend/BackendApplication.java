@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.kouforum.backend.dto.ShareCreate;
 import com.kouforum.backend.models.Share;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.repositories.ShareRepository;
@@ -38,8 +39,10 @@ public class BackendApplication {
 				userRepository.save(user);
 				System.out.println(user.getUsername() + " is created.");
 				for (var j = 1; j <= 20; j++) {
+					ShareCreate shareCreate = new ShareCreate();
+					shareCreate.setContent("Test Paylaşımı " + j + " user(" + i + ")");
 					Share share = new Share();
-					share.setContent("Test Paylaşımı " + j + " user(" + i + ")");
+					share.setContent(shareCreate.getContent());
 					share.setDate(new Date());
 					share.setUser(user);
 					shareRepository.save(share);

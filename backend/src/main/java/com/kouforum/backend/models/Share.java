@@ -8,10 +8,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "shares")
@@ -20,7 +20,6 @@ public class Share {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Size(min = 1, max = 500)
     @Column(length = 500)
     private String content;
 
@@ -29,6 +28,17 @@ public class Share {
 
     @ManyToOne
     private User user;
+
+    @OneToOne(mappedBy = "share")
+    private FileAttachment fileAttachment;
+
+    public FileAttachment getFileAttachment() {
+        return fileAttachment;
+    }
+
+    public void setFileAttachment(FileAttachment fileAttachment) {
+        this.fileAttachment = fileAttachment;
+    }
 
     public User getUser() {
         return user;

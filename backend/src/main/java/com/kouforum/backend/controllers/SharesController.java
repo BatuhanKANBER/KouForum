@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kouforum.backend.dto.CurrentUser;
+import com.kouforum.backend.dto.ShareCreate;
 import com.kouforum.backend.dto.ShareDTO;
-import com.kouforum.backend.models.Share;
 import com.kouforum.backend.services.ShareService;
 import com.kouforum.backend.shared.GenericMessage;
 
@@ -35,7 +35,7 @@ public class SharesController {
     ShareService shareService;
 
     @PostMapping("/submit")
-    GenericMessage saveShared(@Valid @RequestBody Share share,
+    GenericMessage saveShared(@Valid @RequestBody ShareCreate share,
             @AuthenticationPrincipal CurrentUser currentUser) {
         shareService.save(share, currentUser);
         return new GenericMessage("Shared is created.");

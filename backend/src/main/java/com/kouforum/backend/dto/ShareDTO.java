@@ -10,12 +10,24 @@ public class ShareDTO {
     private String content;
     private Date date;
     private User user;
+    private FileAttachmentDTO fileAttachmentDTO;
 
     public ShareDTO(Share share) {
-        setId(share.getId());
-        setContent(share.getContent());
-        setDate(share.getDate());
-        setUser(share.getUser());
+        this.setId(share.getId());
+        this.setContent(share.getContent());
+        this.setDate(share.getDate());
+        this.setUser(share.getUser());
+        if (share.getFileAttachment() != null) {
+            this.fileAttachmentDTO = new FileAttachmentDTO(share.getFileAttachment());
+        }
+    }
+
+    public FileAttachmentDTO getFileAttachmentDTO() {
+        return fileAttachmentDTO;
+    }
+
+    public void setFileAttachmentDTO(FileAttachmentDTO fileAttachmentDTO) {
+        this.fileAttachmentDTO = fileAttachmentDTO;
     }
 
     public User getUser() {

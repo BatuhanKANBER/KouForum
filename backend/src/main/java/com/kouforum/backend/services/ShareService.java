@@ -2,6 +2,7 @@ package com.kouforum.backend.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,8 +11,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.kouforum.backend.dto.CurrentUser;
+import com.kouforum.backend.dto.ShareCreate;
+import com.kouforum.backend.models.FileAttachment;
 import com.kouforum.backend.models.Share;
 import com.kouforum.backend.models.User;
+import com.kouforum.backend.repositories.FileAttachmentRepository;
 import com.kouforum.backend.repositories.ShareRepository;
 
 @Service
@@ -22,12 +26,23 @@ public class ShareService {
     @Autowired
     UserService userService;
 
-    public void save(Share share, CurrentUser currentUser) {
-        User user = new User();
-        user.setId(currentUser.getId());
+    @Autowired
+    FileAttachmentRepository fileAttachmentRepository;
+
+    public void save(ShareCreate shareCreate, CurrentUser currentUser) {
+        Share share = new Share();
+        share.setContent(shareCreate.getContent());
+        User inDB = userService.getUser(currentUser.getId());
         share.setDate(new Date());
-        share.setUser(user);
+        share.setUser(inDB);
         shareRepository.save(share);
+        Optional<FileAttachment> optionalFileAttachment = fileAttachmentRepository
+                .findById(shareCreate.getAttachmentId());
+        if (optionalFileAttachment.isPresent()) {
+            FileAttachment fileAttachment = optionalFileAttachment.get();
+            fileAttachment.setShare(share);
+            fileAttachmentRepository.save(fileAttachment);
+        }
     }
 
     public Page<Share> getShares(Pageable page) {
