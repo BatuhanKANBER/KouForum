@@ -2,6 +2,7 @@ package com.kouforum.backend.models;
 
 import java.util.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class Share {
     @ManyToOne
     private User user;
 
-    @OneToOne(mappedBy = "share")
+    @OneToOne(mappedBy = "share", cascade = CascadeType.REMOVE)
     private FileAttachment fileAttachment;
 
     public FileAttachment getFileAttachment() {

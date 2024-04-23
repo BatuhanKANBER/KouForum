@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.kouforum.backend.dto.CurrentUser;
 import com.kouforum.backend.dto.ShareCreate;
+import com.kouforum.backend.exeptions.AuthorizationExeption;
 import com.kouforum.backend.models.FileAttachment;
 import com.kouforum.backend.models.Share;
 import com.kouforum.backend.models.User;
@@ -28,6 +30,9 @@ public class ShareService {
 
     @Autowired
     FileAttachmentRepository fileAttachmentRepository;
+
+    @Autowired
+    FileService fileService;
 
     public void save(ShareCreate shareCreate, CurrentUser currentUser) {
         Share share = new Share();
@@ -79,6 +84,36 @@ public class ShareService {
     public List<Share> getNewSharesForUser(Long sharesId, Long id, Sort sort) {
         User inDB = userService.getUser(id);
         return shareRepository.findByIdGreaterThanAndUser(sharesId, inDB, sort);
+    }
+
+    public void delete(long id, CurrentUser currentUser) {
+        Optional<Share> optionalShare = shareRepository.findById(id);
+        if (!optionalShare.isPresent()) {
+            throw new AuthorizationExeption();
+        }
+        Share share = optionalShare.get();
+        if (share.getUser().getId() != currentUser.getId()) {
+            throw new AuthorizationExeption();
+        }
+        Share inDB = shareRepository.getOne(id);
+        if (inDB.getFileAttachment() != null) {
+            String fileName = inDB.getFileAttachment().getName();
+            fileService.deleteProfileImage(fileName);
+        }
+        shareRepository.deleteById(id);
+    }
+
+    public void deleteSharesOfUser(long id) {
+        User inDB = userService.getUser(id);
+        Specification<Share> userOwned = userIs(inDB);
+        List<Share> sharesToBeRemoved = shareRepository.findAll(userOwned);
+        shareRepository.deleteAll(sharesToBeRemoved);
+    }
+
+    private Specification<Share> userIs(User user) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.equal(root.get("user"), user);
+        };
     }
 
 }

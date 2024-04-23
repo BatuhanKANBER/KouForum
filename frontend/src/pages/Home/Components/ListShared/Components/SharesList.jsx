@@ -41,6 +41,13 @@ export function SharesList() {
         }))
     }
 
+    const onDeleteShareSuccess = (id) => {
+        setSharePage(previousShareds => ({
+            ...previousShareds,
+            content: previousShareds.content.filter(share => share.id !== id)
+        }))
+    }
+
     useEffect(() => {
         const getCount = async () => {
             const response = await loadNewSharesCount(firstShareId)
@@ -66,7 +73,7 @@ export function SharesList() {
             <div className="list-group">
                 {
                     sharePage.content.map((share) => {
-                        return <SharesListItem key={share.id} share={share} />
+                        return <SharesListItem key={share.id} share={share} onDeleteShare={onDeleteShareSuccess} />
                     })
                 }
             </div>

@@ -39,6 +39,9 @@ public class UserService {
     @Autowired
     FileService fileService;
 
+    @Autowired
+    ShareService shareService;
+
     @Transactional(rollbackOn = MailException.class)
     public void save(User user) {
         try {
@@ -90,6 +93,7 @@ public class UserService {
     }
 
     public void deleteUser(long id) {
+        shareService.deleteSharesOfUser(id);
         User inDB = getUser(id);
         if (inDB.getImage() != null) {
             fileService.deleteProfileImage(inDB.getImage());

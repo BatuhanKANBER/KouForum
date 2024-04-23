@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mui/icons-material": "^5.15.15",
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
     "classnames": "^2.5.1",
@@ -20,6 +23,7 @@
     "primereact": "^10.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-material-symbols": "^4.4.0",
     "react-redux": "^9.1.1",
     "react-router-dom": "^6.22.3"
   },

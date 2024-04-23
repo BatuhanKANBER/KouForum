@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -83,10 +84,18 @@ public class SharesController {
             return ResponseEntity.ok(response);
         }
         if (direction.equals("after")) {
-            List<ShareDTO> newShares = shareService.getNewSharesForUser(sharesId, id, page.getSort()).stream().map(ShareDTO::new)
+            List<ShareDTO> newShares = shareService.getNewSharesForUser(sharesId, id, page.getSort()).stream()
+                    .map(ShareDTO::new)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(newShares);
         }
         return ResponseEntity.ok(shareService.getOldSharesOfUser(sharesId, id, page).map(ShareDTO::new));
     }
+
+    @DeleteMapping("/{id}")
+    GenericMessage deleteShare(@PathVariable long id, @AuthenticationPrincipal CurrentUser currentUser) {
+        shareService.delete(id, currentUser);
+        return new GenericMessage("Share is removed.");
+    }
+
 }

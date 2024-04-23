@@ -15,3 +15,7 @@ export function loadNewSharesCount(id){
 export function loadNewShares(id){
     return http.get(`/api/shares/list/${id}?direction=after`)
 }
+
+export function deleteShare(id){
+    return http.delete(`/api/shares/${id}`)
+}
