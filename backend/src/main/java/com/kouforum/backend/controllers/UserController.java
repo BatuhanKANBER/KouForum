@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kouforum.backend.dto.CurrentUser;
 import com.kouforum.backend.dto.PasswordResetRequest;
 import com.kouforum.backend.dto.PasswordUpdate;
 import com.kouforum.backend.dto.UserCreate;
 import com.kouforum.backend.dto.UserDTO;
 import com.kouforum.backend.dto.UserUpdate;
-import com.kouforum.backend.models.CurrentUser;
 import com.kouforum.backend.services.UserService;
 import com.kouforum.backend.shared.GenericMessage;
 import com.kouforum.backend.shared.Messages;

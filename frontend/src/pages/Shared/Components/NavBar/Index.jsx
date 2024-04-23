@@ -22,9 +22,9 @@ export function Navbar() {
     }
     return <>
         <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-            <Link class="d-flex align-items-center justify-content-center ml-5 link-underline link-underline-opacity-0" to="/">
+            <a class="d-flex align-items-center justify-content-center ml-5 link-underline link-underline-opacity-0" href="/">
             <h1 className="h3 mb-0 text-primary-800">KOUFORUM</h1>
-            </Link>
+            </a>
             {/* Sidebar Toggle (Topbar) */}
             <button id="sidebarToggleTop" className="btn btn-link d-md-none rounded-circle mr-3">
                 <i className="fa fa-bars" />

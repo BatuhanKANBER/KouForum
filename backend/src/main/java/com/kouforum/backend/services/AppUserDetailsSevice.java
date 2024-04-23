@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.kouforum.backend.models.CurrentUser;
+import com.kouforum.backend.dto.CurrentUser;
 import com.kouforum.backend.models.User;
 
 @Service

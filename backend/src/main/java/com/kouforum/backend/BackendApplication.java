@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.kouforum.backend.models.Shared;
+import com.kouforum.backend.models.Share;
 import com.kouforum.backend.models.User;
-import com.kouforum.backend.repositories.SharedRepository;
+import com.kouforum.backend.repositories.ShareRepository;
 import com.kouforum.backend.repositories.UserRepository;
 
 @SpringBootApplication
@@ -22,7 +22,7 @@ public class BackendApplication {
 	}
 
 	@Bean
-	CommandLineRunner fakeUsers(UserRepository userRepository, SharedRepository sharedRepository,
+	CommandLineRunner fakeUsers(UserRepository userRepository, ShareRepository shareRepository,
 			PasswordEncoder passwordEncoder) {
 		return (args) -> {
 			var userInDB = userRepository.findByEmail("user1@gmail.com");
@@ -37,14 +37,14 @@ public class BackendApplication {
 				user.setIs_active(true);
 				userRepository.save(user);
 				System.out.println(user.getUsername() + " is created.");
-			}
-			for (var i = 1; i <= 28; i++) {
-				Shared shared = new Shared();
-				shared.setContent("Test Paylaşımı " + i);
-				shared.setDate(new Date());
-				shared.setUser(null);
-				sharedRepository.save(shared);
-				System.out.println(shared.getContent() + " is created.");
+				for (var j = 1; j <= 20; j++) {
+					Share share = new Share();
+					share.setContent("Test Paylaşımı " + j + " user(" + i + ")");
+					share.setDate(new Date());
+					share.setUser(user);
+					shareRepository.save(share);
+					System.out.println(share.getContent() + " is created.");
+				}
 			}
 		};
 	}

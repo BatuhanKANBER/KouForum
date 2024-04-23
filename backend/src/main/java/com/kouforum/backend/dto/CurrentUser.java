@@ -1,10 +1,12 @@
-package com.kouforum.backend.models;
+package com.kouforum.backend.dto;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.kouforum.backend.models.User;
 
 public class CurrentUser implements UserDetails {
 

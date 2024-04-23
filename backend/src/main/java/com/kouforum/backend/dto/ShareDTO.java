@@ -2,17 +2,28 @@ package com.kouforum.backend.dto;
 
 import java.util.Date;
 
-import com.kouforum.backend.models.Shared;
+import com.kouforum.backend.models.Share;
+import com.kouforum.backend.models.User;
 
-public class SharedDTO {
+public class ShareDTO {
     private long id;
     private String content;
     private Date date;
+    private User user;
 
-    public SharedDTO(Shared shared) {
-        setId(shared.getId());
-        setContent(shared.getContent());
-        setDate(shared.getDate());
+    public ShareDTO(Share share) {
+        setId(share.getId());
+        setContent(share.getContent());
+        setDate(share.getDate());
+        setUser(share.getUser());
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public long getId() {

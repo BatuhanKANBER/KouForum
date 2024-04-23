@@ -26,6 +26,8 @@ public class SecurityConfiguration {
                         .authenticated()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.DELETE, "/api/users/{id}"))
                         .authenticated()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/attachments/upload"))
+                        .authenticated()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/shareds/submit"))
                         .authenticated().anyRequest().permitAll());
         http.httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(new AuthEntryPoint()));

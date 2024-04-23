@@ -11,6 +11,7 @@ import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.kouforum.backend.dto.CurrentUser;
 import com.kouforum.backend.dto.PasswordResetRequest;
 import com.kouforum.backend.dto.PasswordUpdate;
 import com.kouforum.backend.dto.UserUpdate;
@@ -18,7 +19,6 @@ import com.kouforum.backend.exeptions.ActivationNotificationException;
 import com.kouforum.backend.exeptions.InvalidTokenException;
 import com.kouforum.backend.exeptions.NotFoundException;
 import com.kouforum.backend.exeptions.NotUniqueEmailException;
-import com.kouforum.backend.models.CurrentUser;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.repositories.UserRepository;
 

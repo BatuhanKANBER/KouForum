@@ -1,9 +1,9 @@
-import { SharedsList } from "./Components/SharedsList";
+import { SharesList } from "./Components/SharesList";
 
 export function Shareds() {
     return <>
         <div className="mt-5">
-            <SharedsList />
+            <SharesList />
         </div>
     </>
 }

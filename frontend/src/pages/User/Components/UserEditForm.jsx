@@ -24,7 +24,6 @@ export function UserEditForm({ setEditMode, setTempImage }) {
         });
     }
 
-
     const onClickCancel = () => {
         setEditMode(false)
         setNewUsername(authState.username)

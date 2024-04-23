@@ -3,20 +3,23 @@ import { useAuthState } from "../../../Shared/State/context"
 import { ProfileImage } from "../../../Shared/Components/ProfileImage"
 import { Alert } from "../../../Shared/Components/Alert"
 import { Spinner } from "../../../Shared/Components/Spinner"
-import { submitShared } from "./api"
+import { submitAttachment, submitShared } from "./api"
+import { Input } from "../../../Shared/Components/Input"
 
-export function SubmitShared() {
+export function SubmitShared({ user }) {
     const authState = useAuthState()
     const [focused, setFocused] = useState(false)
     const [content, setContent] = useState("")
     const [errors, setErrors] = useState({})
     const [generalErrors, setGeneralErrors] = useState()
     const [apiProgress, setApiProgress] = useState(false)
+    const [newImage, setNewImage] = useState()
 
     useEffect(() => {
         if (!focused) {
             setContent("")
             setErrors({})
+            setNewImage()
         }
     }, [focused])
 
@@ -53,38 +56,58 @@ export function SubmitShared() {
         }
     }
 
-    return <>
+    const onSelectImage = (event) => {
+        if (event.target.files.length < 1) return;
+        const file = event.target.files[0]
+        const fileReader = new FileReader();
+        fileReader.onloadend = () => {
+            const data = fileReader.result
+            setNewImage(data);
+            uploadFile(file)
+        }
+        fileReader.readAsDataURL(file);
+    }
 
-        <div className="card">
-            <div className="card-header">
-                <div className="text-left">
-                    <ProfileImage width={30} image={authState.image} />
+    const uploadFile = async file => {
+        const attachment = new FormData()
+        attachment.append('file', file)
+        await submitAttachment(attachment)
+    }
+
+
+    return <>
+            <div className="card">
+                <div className="card-header">
+                    <div className="text-left">
+                        <ProfileImage width={30} image={authState.image} />
+                    </div>
                 </div>
-            </div>
-            <form onSubmit={onSubmit}>
                 <div className="col-12 mt-2 mb-2">
                     <textarea disabled={apiProgress} id="content" value={content} onChange={(event) => setContent(event.target.value)} onFocus={() => setFocused(true)} className={errors.content ? "form-control is-invalid" : "form-control"} placeholder="Bir şeyler paylaş..." type="text"></textarea>
                     <div className="invalid-feedback">{errors.content}</div>
                 </div>
                 {
-                    focused && (
+                    focused && (<>
+                        <div className="col-12">
+                            <Input type="file" onChange={onSelectImage} />
+                            {newImage && <img className="img-thumbnail" src={newImage}></img>}
+                        </div>
                         <div className="col-12 mt-1 mb-1 d-flex justify-content-between">
                             <button disabled={apiProgress} type="button" onClick={() => setFocused(false)} className="btn btn-secondary w-25">Vazgeç</button>
-                            <button disabled={apiProgress} type="submit" className="btn btn-primary w-25">
+                            <button disabled={apiProgress} type="submit" onClick={onSubmit} className="btn btn-primary w-25">
                                 {apiProgress &&
                                     (<Spinner sm />)}
                                 Paylaş
                             </button>
 
                         </div>
+                    </>
                     )
                 }
                 <div className="col-12">
                     {generalErrors && (<Alert type="danger">{generalErrors}</Alert>)}
 
                 </div>
-            </form>
-        </div>
-
+            </div>
     </>
 }

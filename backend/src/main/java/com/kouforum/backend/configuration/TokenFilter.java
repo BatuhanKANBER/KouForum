@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import com.kouforum.backend.models.CurrentUser;
+import com.kouforum.backend.dto.CurrentUser;
 import com.kouforum.backend.models.User;
 import com.kouforum.backend.services.TokenService;
 
