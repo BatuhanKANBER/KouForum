@@ -32,6 +32,5 @@ export function Activation() {
             <Spinner />}
         {data && (<Alert>{data.message}</Alert>)}
         {error && (<Alert type="danger">{error}</Alert>)}
-
     </>
 }

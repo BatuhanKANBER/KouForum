@@ -31,6 +31,9 @@ public class AuthService {
         if (!passwordEncoder.matches(creds.password(), inDB.getPassword())) {
             throw new AuthenticationException();
         }
+        if (inDB.isActive() == false) {
+            throw new AuthenticationException();
+        }
 
         Token token = tokenService.createToken(inDB, creds);
         AuthResponse authResponse = new AuthResponse();
